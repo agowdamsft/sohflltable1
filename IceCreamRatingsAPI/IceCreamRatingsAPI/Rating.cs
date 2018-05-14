@@ -5,7 +5,7 @@
         public Rating()
         {
         }
-        public string id;
+        public string id { get;  set; }
         public string userid { get; internal set; }
         public string productid { get; internal set; }
         public string timestamp { get; internal set; }
