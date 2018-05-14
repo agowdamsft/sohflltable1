@@ -1,0 +1,7 @@
+node_modules/
+bin/
+obj/
+.vs/
+
+local.settings.json
+package-lock.json
