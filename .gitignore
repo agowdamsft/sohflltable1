@@ -1,5 +1,9 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
 
-/IceCreamRatingsAPI/.vs/IceCreamRatingsAPI/v15/Server/sqlite3
+node_modules/
+bin/
+obj/
+.vs/
+
+local.settings.json
+package-lock.json
+
