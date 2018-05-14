@@ -30,13 +30,13 @@ namespace IceCreamRatingsAPI
             rating.rating = data?.rating;
             rating.usernotes = data?.usernotes;
 
-            var dbRepo = new DocumentDBRepository();
+            var dbRepo = new DocumentDBRepository<Rating>();
 
-            dbRepo.CreateItemAsync<Rating>(rating);
-           
+            var result = dbRepo.CreateItemAsync(rating);
 
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Hello, {name}")
+
+            return rating.userid != null
+                ? (ActionResult)new OkObjectResult($"Hello, {result}")
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
         }
     }
