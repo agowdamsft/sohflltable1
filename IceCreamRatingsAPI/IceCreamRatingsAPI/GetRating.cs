@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace IceCreamRatingsAPI
 {
@@ -25,11 +26,16 @@ namespace IceCreamRatingsAPI
 
             var dbRepo = new DocumentDBRepository<Rating>();
 
-            var result = await dbRepo.GetItemsAsync(d => d.id==ratingid);
+           // iRating rating = new iRating();
+
+           //var rating = await dbRepo.GetItemAsync(ratingid);
+            
+           var result = await dbRepo.GetItemsAsync(d => d.id==ratingid);
+
 
 
             return ratingid != null
-                ? (ActionResult)new OkObjectResult($"Hello, {ratingid}")
+                ? (ActionResult)new OkObjectResult(result.FirstOrDefault())
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
         }
     }

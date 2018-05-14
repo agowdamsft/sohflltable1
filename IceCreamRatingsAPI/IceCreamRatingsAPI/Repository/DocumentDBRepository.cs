@@ -17,6 +17,7 @@
         private readonly string Key = "hp0D2Yf13sd54IKfCZ4qSO8JEvaYPFymqAE6ABsP1QsrCNRg1xgUmL4r5lq4ONl436QBXymOJzM6b7qsiyKjHA==";
         private readonly string DatabaseId = "SOHFLLTable1";
         private readonly string CollectionId = "Ratings";
+        private readonly string p_PartitionKey = "cc20a6fb-a91f-4192-874d-132493685376";
         private DocumentClient client;
 
         public DocumentDBRepository()
@@ -30,7 +31,7 @@
         {
             try
             {
-                Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, id));
+                Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, id),new RequestOptions() { PartitionKey= new PartitionKey(p_PartitionKey)});
                 return (T)(dynamic)document;
             }
             catch (DocumentClientException e)
@@ -50,9 +51,14 @@
         {
             IDocumentQuery<T> query = client.CreateDocumentQuery<T>(
                 UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId),
-                new FeedOptions { MaxItemCount = -1 })
+                new FeedOptions {EnableCrossPartitionQuery = true })
                 .Where(predicate)
                 .AsDocumentQuery();
+
+            // Enable cross partition query.
+            //var queryable = client.CreateDocumentQuery<Book>(
+            //    collectionLink, new FeedOptions { EnableCrossPartitionQuery = true }).Where(b => b.Price > 1000);
+
 
             List<T> results = new List<T>();
             while (query.HasMoreResults)
