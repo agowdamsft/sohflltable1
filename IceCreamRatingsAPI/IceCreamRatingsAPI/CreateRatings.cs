@@ -22,6 +22,19 @@ namespace IceCreamRatingsAPI
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             name = name ?? data?.name;
 
+            var rating = new Rating();
+            rating.userid = data?.userid;
+            rating.productid = data?.productid;
+            rating.timestamp = data?.timestamp;
+            rating.locationname = data?.locationname;
+            rating.rating = data?.rating;
+            rating.usernotes = data?.usernotes;
+
+            var dbRepo = new DocumentDBRepository();
+
+            dbRepo.CreateItemAsync<Rating>(rating);
+           
+
             return name != null
                 ? (ActionResult)new OkObjectResult($"Hello, {name}")
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");

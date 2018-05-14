@@ -15,8 +15,8 @@
        
         private readonly string Endpoint = "https://table1fllsoh.documents.azure.com:443/";
         private readonly string Key = "hp0D2Yf13sd54IKfCZ4qSO8JEvaYPFymqAE6ABsP1QsrCNRg1xgUmL4r5lq4ONl436QBXymOJzM6b7qsiyKjHA==";
-        private readonly string DatabaseId = "ToDoList";
-        private readonly string CollectionId = "Items";
+        private readonly string DatabaseId = "SOHFLLTable1";
+        private readonly string CollectionId = "Ratings";
         private DocumentClient client;
 
         public DocumentDBRepository()
