@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
 using System;
-using System.Net;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 
@@ -18,13 +17,10 @@ namespace IceCreamRatingsAPI
         [FunctionName("CreateRatings")]
         public static async System.Threading.Tasks.Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequest req, TraceWriter log)
         {
-            log.Info("C# HTTP trigger function processed a request.");
-
-            string name = req.Query["name"];
+            log.Info($"C# HTTP trigger function CreateRatings Started: {DateTime.Now}");
 
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
 
             var x  = new Connect();
 
@@ -39,7 +35,7 @@ namespace IceCreamRatingsAPI
                 id = Guid.NewGuid().ToString(),
             };
 
-
+            log.Info($"C# HTTP trigger function CreateRatings Check Product ID: {DateTime.Now}");
 
             var uri =  $"https://serverlessohlondonproduct.azurewebsites.net/api/GetProduct/?productid=" + rating.productid;
 
@@ -53,6 +49,10 @@ namespace IceCreamRatingsAPI
                 return new BadRequestObjectResult("Please pass a valid productid on the query string or in the request body");
             }
 
+            log.Info($"C# HTTP trigger function CreateRatings Check Product ID Ended: {DateTime.Now}");
+
+            log.Info($"C# HTTP trigger function CreateRatings Check User ID Started: {DateTime.Now}");
+
             uri = $"https://serverlessohlondonuser.azurewebsites.net/api/GetUser/?userid=" + rating.userid;
 
             try
@@ -65,83 +65,18 @@ namespace IceCreamRatingsAPI
                 return new BadRequestObjectResult("Please pass a valid userid on the query string or in the request body");
             }
 
+            log.Info($"C# HTTP trigger function CreateRatings Check User ID Completed: {DateTime.Now}");
+
+            log.Info($"C# HTTP trigger function CreateRatings Save Called: {DateTime.Now}");
             var dbRepo = new DocumentDBRepository<Rating>();
 
             await dbRepo.CreateItemAsync(rating);
 
-
+            log.Info($"C# HTTP trigger function CreateRatings Save Completed: {DateTime.Now}");
 
             return rating.userid != null
                 ? (ActionResult)new OkObjectResult(rating)
                 : new BadRequestObjectResult("Please pass a userID on the query string or in the request body");
-        }
-    }
-
-    public class Connect
-    {
-        public string id;
-        public string type;
-
-        protected string api = "https://serverlessohlondonproduct.azurewebsites.net/api/GetProduct/";
-        protected string options = "?productid=4c25613a-a3c2-4ef3-8e02-9c335eb23204";
-
-        public string request()
-        {
-            string totalUrl = this.join(id);
-
-            return this.HttpGet(totalUrl);
-        }
-
-        protected string join(string s)
-        {
-            return api + type + "/" + s + options;
-        }
-
-        protected string get(string url)
-        {
-            try
-            {
-                string rt;
-
-                WebRequest request = WebRequest.Create(url);
-
-                WebResponse response = request.GetResponse();
-
-                Stream dataStream = response.GetResponseStream();
-
-                StreamReader reader = new StreamReader(dataStream);
-
-                rt = reader.ReadToEnd();
-
-                Console.WriteLine(rt);
-
-                reader.Close();
-                response.Close();
-
-                return rt;
-            }
-
-            catch (Exception ex)
-            {
-                return "Error: " + ex.Message;
-            }
-        }
-        public string HttpGet(string URI)
-        {
-            WebClient client = new WebClient();
-
-            // Add a user agent header in case the 
-            // requested URI contains a query.
-
-            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-
-            Stream data = client.OpenRead(URI);
-            StreamReader reader = new StreamReader(data);
-            string s = reader.ReadToEnd();
-            data.Close();
-            reader.Close();
-
-            return s;
         }
     }
 }
