@@ -31,23 +31,30 @@ namespace IceCreamRatingsAPI
         {
             var result = new List<LineItem>();
 
+            var isReady = false;
+
             foreach (var item in orderItems)
             {
-                var itemsplit = item.Split(',');
-
-                var lineitem = new LineItem
+                if (isReady)
                 {
-                    PoNumber = itemsplit[0],
-                    ProductId = itemsplit[1],
-                    Quantity = long.Parse(itemsplit[2]),
-                    Unitcost = double.Parse(itemsplit[3]),
-                    Totalcost = double.Parse(itemsplit[4]),
-                    Totaltax = double.Parse(itemsplit[5]),
-                    ProductDescription = GetProductDescription(itemsplit[1],products),
-                    ProductName = GetProductName(itemsplit[1], products)
-                };
+                    var itemsplit = item.Split(',');
 
-                result.Add(lineitem);
+                    var lineitem = new LineItem
+                    {
+                        PoNumber = itemsplit[0],
+                        ProductId = itemsplit[1],
+                        Quantity = long.Parse(itemsplit[2]),
+                        Unitcost = double.Parse(itemsplit[3]),
+                        Totalcost = double.Parse(itemsplit[4]),
+                        Totaltax = double.Parse(itemsplit[5]),
+                        ProductDescription = GetProductDescription(itemsplit[1], products),
+                        ProductName = GetProductName(itemsplit[1], products)
+                    };
+
+                    result.Add(lineitem);
+                }
+
+                isReady = true;
             }
 
             return result.ToArray();
@@ -57,6 +64,7 @@ namespace IceCreamRatingsAPI
         {
             foreach (var product in products)
             {
+                
                 var productsplit = product.Split(',');
 
                 if (productid == productsplit[0])
@@ -87,8 +95,8 @@ namespace IceCreamRatingsAPI
 
         private static PO GetHeader(string[] header)
         {
-            var headerFields = header[0].Split(',');
-
+            var headerFields = header[1].Split(',');
+         
             return new PO
             {
                 PoNumber = headerFields[0],
