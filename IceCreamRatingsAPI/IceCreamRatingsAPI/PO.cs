@@ -10,6 +10,9 @@ namespace IceCreamRatingsAPI
         [JsonProperty("ponumber")]
         public string PoNumber { get; set; }
 
+        [JsonProperty("filename")]
+        public string FileName { get; set; }
+
         [JsonProperty("datetime")]
         public string Datetime { get; set; }
 

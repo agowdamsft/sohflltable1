@@ -14,11 +14,11 @@ namespace IceCreamRatingsAPI
             await dbRepo.CreateItemAsync(po);
         }
 
-        public static bool ProcessPOInformation(string[] header, string[] orderItems, string[] products)
+        public static bool ProcessPOInformation(string[] header, string[] orderItems, string[] products, string filename)
         {
             var result = false;
 
-            var localPO = GetHeader(header);
+            var localPO = GetHeader(header, filename);
 
             localPO.LineItems = GetItems(orderItems, products);
 
@@ -42,7 +42,7 @@ namespace IceCreamRatingsAPI
                     var lineitem = new LineItem
                     {
                         PoNumber = itemsplit[0],
-                        ProductId = itemsplit[1],
+                         ProductId = itemsplit[1],
                         Quantity = long.Parse(itemsplit[2]),
                         Unitcost = double.Parse(itemsplit[3]),
                         Totalcost = double.Parse(itemsplit[4]),
@@ -93,13 +93,14 @@ namespace IceCreamRatingsAPI
             return string.Empty;
         }
 
-        private static PO GetHeader(string[] header)
+        private static PO GetHeader(string[] header, string filename)
         {
             var headerFields = header[1].Split(',');
          
             return new PO
             {
                 PoNumber = headerFields[0],
+                FileName = filename,
                 Datetime = headerFields[1],
                 LocationId = headerFields[2],
                 LocationName = headerFields[3],

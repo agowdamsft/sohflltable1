@@ -64,7 +64,7 @@ namespace IceCreamRatingsAPI
 
                     //TODO:
                     // Call content processor
-                  bool successinsert =  BatchSavePO.ProcessPOInformation(orderHeaderContent, orderlineContent, productInfoContent);
+                  bool successinsert =  BatchSavePO.ProcessPOInformation(orderHeaderContent, orderlineContent, productInfoContent, filenameorderheader);
 
                     //If True Delete
                     if(successinsert)

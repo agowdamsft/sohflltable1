@@ -28,7 +28,7 @@ namespace IceCreamRatingsAPI
                                               "0f5a0fe8-4506-4332-969e-699a693334a8,Beer,Hey this isn't ice cream! };",
                                               "BatchSavePO.ProcessPOInformation(header, orderItems, products);" };
 
-            BatchSavePO.ProcessPOInformation(header, orderItems, products);
+            BatchSavePO.ProcessPOInformation(header, orderItems, products, "test");
 
             return (ActionResult)new OkObjectResult($"Processed");
 
