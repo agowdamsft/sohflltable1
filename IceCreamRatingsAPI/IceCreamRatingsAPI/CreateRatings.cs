@@ -22,7 +22,7 @@ namespace IceCreamRatingsAPI
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
 
-            var x  = new Connect();
+            var connect  = new Connect();
 
             var rating = new Rating
             {
@@ -41,7 +41,7 @@ namespace IceCreamRatingsAPI
 
             try
             {
-                dynamic productresult = JsonConvert.DeserializeObject(x.HttpGet(uri));
+                dynamic productresult = JsonConvert.DeserializeObject(connect.HttpGet(uri));
             }
             catch (Exception)
             {
@@ -57,7 +57,7 @@ namespace IceCreamRatingsAPI
 
             try
             {
-                dynamic productresult = JsonConvert.DeserializeObject(x.HttpGet(uri));
+                dynamic productresult = JsonConvert.DeserializeObject(connect.HttpGet(uri));
             }
             catch (Exception)
             {
@@ -68,7 +68,8 @@ namespace IceCreamRatingsAPI
             log.Info($"C# HTTP trigger function CreateRatings Check User ID Completed: {DateTime.Now}");
 
             log.Info($"C# HTTP trigger function CreateRatings Save Called: {DateTime.Now}");
-            var dbRepo = new DocumentDBRepository<Rating>();
+
+            var dbRepo = new DocumentDBRepository<Rating>("SOHFLLTable1", "Ratings");
 
             await dbRepo.CreateItemAsync(rating);
 

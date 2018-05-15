@@ -7,6 +7,9 @@ namespace IceCreamRatingsAPI
 {
     public partial class PO
     {
+        [JsonProperty("ponumber")]
+        public string PoNumber { get; set; }
+
         [JsonProperty("datetime")]
         public string Datetime { get; set; }
 
@@ -34,6 +37,9 @@ namespace IceCreamRatingsAPI
 
     public partial class LineItem
     {
+        [JsonProperty("ponumber")]
+        public string PoNumber { get; set; }
+
         [JsonProperty("productId")]
         public string ProductId { get; set; }
 

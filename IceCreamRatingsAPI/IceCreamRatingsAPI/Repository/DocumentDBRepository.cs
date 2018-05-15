@@ -15,16 +15,19 @@
        
         private readonly string Endpoint = "https://table1fllsoh.documents.azure.com:443/";
         private readonly string Key = "hp0D2Yf13sd54IKfCZ4qSO8JEvaYPFymqAE6ABsP1QsrCNRg1xgUmL4r5lq4ONl436QBXymOJzM6b7qsiyKjHA==";
-        private readonly string DatabaseId = "SOHFLLTable1";
-        private readonly string CollectionId = "Ratings";
-        private readonly string p_PartitionKey = "cc20a6fb-a91f-4192-874d-132493685376";
+        private string DatabaseId = "SOHFLLTable1";
+        private string CollectionId = "Ratings";
+        private string p_PartitionKey = "cc20a6fb-a91f-4192-874d-132493685376";
         private DocumentClient client;
 
-        public DocumentDBRepository()
+        public DocumentDBRepository(string databaseId, string collectionId, string partionKey = null)
         {
             this.client = new DocumentClient(new Uri(Endpoint), Key);
             CreateDatabaseIfNotExistsAsync().Wait();
             CreateCollectionIfNotExistsAsync().Wait();
+            DatabaseId = databaseId;
+            CollectionId = collectionId;
+            p_PartitionKey = partionKey;
         }
 
         public async Task<T> GetItemAsync(string id)

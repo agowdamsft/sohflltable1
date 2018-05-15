@@ -19,7 +19,7 @@ namespace IceCreamRatingsAPI
         {
             log.Info("C# HTTP trigger function processed a request.");
 
-            var ratingsRepo = new DocumentDBRepository<Rating>();
+            var ratingsRepo = new DocumentDBRepository<Rating>("SOHFLLTable1", "Ratings", "cc20a6fb-a91f-4192-874d-132493685376");
 
             var ratingsByUser = await ratingsRepo.GetItemsAsync((r) => r.userid == userId);
 

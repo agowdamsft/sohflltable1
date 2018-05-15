@@ -24,7 +24,7 @@ namespace IceCreamRatingsAPI
             //dynamic data = JsonConvert.DeserializeObject(requestBody);
             //ratingid = ratingid ?? data?.name;
 
-            var dbRepo = new DocumentDBRepository<Rating>();
+            var dbRepo = new DocumentDBRepository<Rating>("SOHFLLTable1", "Ratings", "cc20a6fb-a91f-4192-874d-132493685376");
 
            // iRating rating = new iRating();
 
