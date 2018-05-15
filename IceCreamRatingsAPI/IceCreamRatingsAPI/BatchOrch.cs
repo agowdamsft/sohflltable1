@@ -64,6 +64,20 @@ namespace IceCreamRatingsAPI
 
                     //TODO:
                     // Call content processor
+                  bool successinsert =  BatchSavePO.ProcessPOInformation(orderHeaderContent, orderlineContent, productInfoContent);
+
+                    //If True Delete
+                    if(successinsert)
+                    {
+                        var blobReference = cloudBlobContainer.GetBlobReference(filenameorderheader);
+                          await blobReference.DeleteIfExistsAsync();
+
+                        var blobReference2 = cloudBlobContainer.GetBlobReference(filenameorderlineitems);
+                        await blobReference.DeleteIfExistsAsync();
+
+                        var blobReference3 = cloudBlobContainer.GetBlobReference(filenameorderproductInfo);
+                        await blobReference.DeleteIfExistsAsync();
+                    }
 
 
                 }
