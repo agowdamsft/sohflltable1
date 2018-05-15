@@ -8,6 +8,8 @@ using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
 using System;
 using System.Net;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace IceCreamRatingsAPI
 {
@@ -26,14 +28,18 @@ namespace IceCreamRatingsAPI
 
             var x  = new Connect();
 
-            var rating = new Rating();
-            rating.userid = data?.userid;
-            rating.productid = data?.productid;
-            rating.timestamp = data?.timestamp;
-            rating.locationname = data?.locationname;
-            rating.rating = data?.rating;
-            rating.usernotes = data?.usernotes;
-            rating.id = Guid.NewGuid().ToString();
+            var rating = new Rating
+            {
+                userid = data?.userid,
+                productid = data?.productid,
+                timestamp = data?.timestamp,
+                locationname = data?.locationname,
+                rating = data?.rating,
+                usernotes = data?.usernotes,
+                id = Guid.NewGuid().ToString(),
+            };
+
+
 
             var uri =  $"https://serverlessohlondonproduct.azurewebsites.net/api/GetProduct/?productid=" + rating.productid;
 
@@ -62,6 +68,7 @@ namespace IceCreamRatingsAPI
             var dbRepo = new DocumentDBRepository<Rating>();
 
             await dbRepo.CreateItemAsync(rating);
+
 
 
             return rating.userid != null
