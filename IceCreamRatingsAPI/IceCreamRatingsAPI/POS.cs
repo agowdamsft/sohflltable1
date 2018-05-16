@@ -13,8 +13,6 @@ namespace IceCreamRatingsAPI
         [JsonProperty("details")]
         public Detail[] Details { get; set; }
 
-        [JsonProperty("sentiment")]
-        public Sentiment SentimentScore { get; set; }
     }
 
     public partial class Detail
