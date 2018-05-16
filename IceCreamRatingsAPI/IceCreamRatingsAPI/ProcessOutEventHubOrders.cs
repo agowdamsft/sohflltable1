@@ -14,17 +14,20 @@ namespace IceCreamRatingsAPI
             log.Info($"C# Event Hub trigger function processed a message Length: {myEventHubMessage.Length}");
             POS newpositem = new POS();
 
-           foreach(string item in myEventHubMessage)
+            foreach (string item in myEventHubMessage)
             {
                 newpositem = JsonConvert.DeserializeObject<POS>(item);
 
-              bool success= await BatchSavePOS.SavePOSAsync(newpositem);
-                if(success)
-                log.Info($"{item} \r\n");
+                bool success = await BatchSavePOS.SavePOSAsync(newpositem);
 
+                if (success)
+                {
+                    log.Info($"{item} \r\n");
+                }
                 else
+                {
                     log.Info($"Failed to process 1 item");
-
+                }
             }
         }
     }
