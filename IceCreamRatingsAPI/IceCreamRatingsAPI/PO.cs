@@ -5,6 +5,13 @@ using System.Text;
 
 namespace IceCreamRatingsAPI
 {
+
+    public partial class Sentiment
+    {
+        [JsonProperty("SentimentScore")]
+        public Decimal SentimentScore { get; set; }
+    }
+
     public partial class PO
     {
         [JsonProperty("ponumber")]
