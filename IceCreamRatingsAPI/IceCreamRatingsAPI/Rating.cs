@@ -5,12 +5,12 @@
         public Rating()
         {
         }
-        public string id;
-        public string userid { get; internal set; }
-        public string productid { get; internal set; }
-        public string timestamp { get; internal set; }
-        public string locationname { get; internal set; }
-        public int? rating { get; internal set; }
-        public string usernotes { get; internal set; }
+        public string id { get;  set; }
+        public string userid { get;  set; }
+        public string productid { get;  set; }
+        public string timestamp { get;  set; }
+        public string locationname { get;  set; }
+        public int? rating { get;  set; }
+        public string usernotes { get;  set; }
     }
 }
