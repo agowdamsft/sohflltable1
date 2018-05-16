@@ -39,7 +39,7 @@ namespace IceCreamRatingsAPI
 
 
 
-                var results = await cloudBlobContainer.ListBlobsSegmentedAsync(prefix, blobContinuationToken);
+                var results = await cloudBlobContainer.ListBlobsSegmentedAsync(prefix, false, BlobListingDetails.None,10, blobContinuationToken,null,null);
                 // Get the value of the continuation token returned by the listing call.
                 blobContinuationToken = results.ContinuationToken;
                 int count = 0;
