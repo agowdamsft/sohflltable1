@@ -89,7 +89,8 @@ namespace IceCreamRatingsAPI
 
             Sentiment sentimentPayload = new Sentiment();
             sentimentPayload.Documents = sentiments.ToArray();
-            request.AddBody(JsonConvert.SerializeObject(sentimentPayload));
+            request.AddJsonBody(sentimentPayload);
+            request.RequestFormat = DataFormat.Json;
 
             IRestResponse response = client.Execute(request);
             var contentReturned = response.Content;
