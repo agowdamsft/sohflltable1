@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IceCreamRatingsAPI
 {
     public class BatchSavePO
     {
 
-        public static async void SavePOAsync(PO po)
+        public static async Task<bool> SavePOAsync(PO po)
         {
             var dbRepo = new DocumentDBRepository<PO>("SOHFLLTable1", "PurchaseOrder");
 
             await dbRepo.CreateItemAsync(po);
+            return true;
         }
 
-        public static bool ProcessPOInformation(string[] header, string[] orderItems, string[] products, string filename)
+        public static async Task<bool> ProcessPOInformation(string[] header, string[] orderItems, string[] products, string filename)
         {
             var result = false;
 
@@ -22,7 +22,7 @@ namespace IceCreamRatingsAPI
 
             localPO.LineItems = GetItems(orderItems, products);
 
-            SavePOAsync(localPO);
+            result = await SavePOAsync(localPO);
 
             return result; 
         }
