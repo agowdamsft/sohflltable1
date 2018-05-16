@@ -17,8 +17,6 @@ namespace IceCreamRatingsAPI
 {
     public static class CreateRatings
     {
-        private static object request2;
-
         [FunctionName("CreateRatings")]
         public static async System.Threading.Tasks.Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)]HttpRequest req, TraceWriter log)
         {
@@ -37,7 +35,7 @@ namespace IceCreamRatingsAPI
                 locationname = data?.locationname,
                 rating = data?.rating,
                 usernotes = data?.usernotes,
-                id = Guid.NewGuid().ToString(),
+                id = Guid.NewGuid().ToString()
             };
 
             log.Info($"C# HTTP trigger function CreateRatings Check Product ID: {DateTime.Now}");
@@ -50,7 +48,6 @@ namespace IceCreamRatingsAPI
             }
             catch (Exception)
             {
-
                 return new BadRequestObjectResult("Please pass a valid productid on the query string or in the request body");
             }
 
@@ -66,7 +63,6 @@ namespace IceCreamRatingsAPI
             }
             catch (Exception)
             {
-
                 return new BadRequestObjectResult("Please pass a valid userid on the query string or in the request body");
             }
 
@@ -80,8 +76,6 @@ namespace IceCreamRatingsAPI
             var request = new RestRequest("", Method.POST);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Ocp-Apim-Subscription-Key", Environment.GetEnvironmentVariable("TextAnalyticsKey", EnvironmentVariableTarget.Process));
-
-
 
             DocumentSentiment sentimentDocPayload = new DocumentSentiment
             {
@@ -97,7 +91,6 @@ namespace IceCreamRatingsAPI
             sentimentPayload.Documents = sentiments.ToArray();
             request.AddBody(JsonConvert.SerializeObject(sentimentPayload));
 
-            
             IRestResponse response = client.Execute(request);
             var contentReturned = response.Content;
 
@@ -106,15 +99,16 @@ namespace IceCreamRatingsAPI
             if (response.IsSuccessful)
             {
                 var sentimentDeserialized = JsonConvert.DeserializeObject<SentimentReturn>(contentReturned);
+                rating.Sentiment = sentimentDeserialized.Documents[0].Score;
+            }
 
-                log.Info($"C# HTTP trigger function CreateRatings Save Called: {DateTime.Now}");
+            log.Info($"C# HTTP trigger function CreateRatings Save Called: {DateTime.Now}");
 
-                var dbRepo = new DocumentDBRepository<Rating>("SOHFLLTable1", "Ratings");
-                await dbRepo.CreateItemAsync(rating);
+            var dbRepo = new DocumentDBRepository<Rating>("SOHFLLTable1", "Ratings");
+            await dbRepo.CreateItemAsync(rating);
 
-                log.Info($"C# HTTP trigger function CreateRatings Save Completed: {DateTime.Now}");
-            }           
-
+            log.Info($"C# HTTP trigger function CreateRatings Save Completed: {DateTime.Now}");
+            
             return rating.userid != null
                 ? (ActionResult)new OkObjectResult(rating)
                 : new BadRequestObjectResult("Please pass a userID on the query string or in the request body");

@@ -35,7 +35,7 @@ namespace IceCreamRatingsAPI
     public partial class DocumentReturn
     {
         [JsonProperty("score")]
-        public double Score { get; set; }
+        public decimal Score { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }

@@ -8,7 +8,7 @@ namespace IceCreamRatingsAPI
 {
     public static class ProcessOutEventHubOrders
     {
-        [FunctionName("ProcessOutEventHubOrders")]
+        //[FunctionName("ProcessOutEventHubOrders")]
         public static async Task Run([EventHubTrigger("eventhubpos", Connection = "EVentHubConn")]string[] myEventHubMessage, TraceWriter log)
         {
             log.Info($"C# Event Hub trigger function processed a message Length: {myEventHubMessage.Length}");
